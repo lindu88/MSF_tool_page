@@ -71,10 +71,12 @@ with tab1:
     if st.button("Run MSF_calplot", key="run_MSF_calplot", type="primary"):
         args = [input_file,"--site", site,"--null-periods", null_file,"--save-dir", save_path,"--no-show"]
 
-        figs = MSF_calplot_tsv.main(args)
+        figs, dfs = MSF_calplot_tsv.main(args)
 
         for fig in figs:
             st.pyplot(fig)
+        for df in df:
+            st.dataframe(df)
 
     st.write("docs here")
 with tab2:

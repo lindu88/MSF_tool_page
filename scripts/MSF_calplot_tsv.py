@@ -10,6 +10,9 @@ from typing import Any
 
 import calplot
 import matplotlib.pyplot as plt
+import pandas as pd
+from pandas import DataFrame
+from xlwings.base_classes import Names
 
 from .msf_plot_tools.common import (
     DEFAULT_NULL_COLOR,
@@ -102,8 +105,9 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: list[str] | None = None) -> list[Any]:
+def main(argv: list[str] | None = None) -> tuple[list[Any], list[DataFrame]]:
     figs = []
+    dfs = []
 
     args = build_parser().parse_args(argv)
 
@@ -177,12 +181,14 @@ def main(argv: list[str] | None = None) -> list[Any]:
                     series,
                     round_bounds_to_int=True,
                 )
-
+        df2 = pd.DataFrame(series)
         figs.append(fig)
+        dfs.append(df2)
 
         if output_dir is not None:
             output_path = output_dir / f"{safe_filename(plot_name)}_{args.value_mode}.png"
             fig.savefig(output_path, dpi=args.dpi, bbox_inches="tight")
+            df2.to_csv(output_path)
 
         if args.no_show:
             plt.close(fig)
@@ -190,7 +196,7 @@ def main(argv: list[str] | None = None) -> list[Any]:
             plt.show()
             plt.close(fig)
 
-    return figs
+    return figs, dfs
 
 
 if __name__ == "__main__":
