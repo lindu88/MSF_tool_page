@@ -12,7 +12,6 @@ import calplot
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import DataFrame
-from xlwings.base_classes import Names
 
 from .msf_plot_tools.common import (
     DEFAULT_NULL_COLOR,
@@ -187,8 +186,9 @@ def main(argv: list[str] | None = None) -> tuple[list[Any], list[DataFrame]]:
 
         if output_dir is not None:
             output_path = output_dir / f"{safe_filename(plot_name)}_{args.value_mode}.png"
+            output_path_df = output_dir / f"{safe_filename(plot_name)}_{args.value_mode}.csv"
             fig.savefig(output_path, dpi=args.dpi, bbox_inches="tight")
-            df2.to_csv(output_path)
+            df2.to_csv(output_path_df)
 
         if args.no_show:
             plt.close(fig)

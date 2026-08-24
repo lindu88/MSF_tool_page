@@ -104,10 +104,11 @@ def finish_hour_plot(
     return fig
 
 
-def main(argv: list[str] | None = None) -> list[Any]:
+def main(argv: list[str] | None = None) -> tuple[list[Any], list[Any]]:
     args = build_parser().parse_args(argv)
 
     figs = []
+    dfs = []
 
     if args.no_show and not args.save_dir:
         raise ValueError("--no-show requires --save-dir so the plots go somewhere.")
@@ -179,9 +180,15 @@ def main(argv: list[str] | None = None) -> list[Any]:
         fig = plt.figure(figsize=(10, 4.5))
         plt.bar(hours, values.values, color=bar_color)
 
+        #values dataframe
+        df2 = pd.DataFrame(values, index=hours, columns=["value"])
+        df2.index.name = "hour"
+
         output_path = None
         if output_dir is not None:
             output_path = output_dir / f"{safe_filename(compound)}_{args.hour_mode}.png"
+            output_path_df = output_dir / f"{safe_filename(compound)}_{args.hour_mode}.csv"
+            df2.to_csv(output_path_df)
 
         fig = finish_hour_plot(
             fig,
@@ -194,9 +201,10 @@ def main(argv: list[str] | None = None) -> list[Any]:
             dpi=args.dpi,
             show_plot=not args.no_show,
         )
+        dfs.append(df2)
         figs.append(fig)
 
-    return figs
+    return figs, dfs
 
 
 if __name__ == "__main__":

@@ -73,10 +73,12 @@ with tab1:
 
         figs, dfs = MSF_calplot_tsv.main(args)
 
-        for fig in figs:
-            st.pyplot(fig)
-        for df in df:
-            st.dataframe(df)
+        for fig, df in zip(figs, dfs):
+            section = st.container()
+            with section:
+                st.pyplot(fig)
+                st.dataframe(df)
+
 
     st.write("docs here")
 with tab2:
@@ -168,9 +170,12 @@ with tab4:
         args = [input_file, "--site", site, "--top-n", str(top_n), "--title-suffix", title_suffix, "--save-dir",
                 save_path, "--no-show"]
 
-        figs = MSF_hourplot.main(args)
+        figs, dfs = MSF_hourplot.main(args)
 
-        for fig in figs:
-            st.pyplot(fig)
+        for fig, df in zip(figs, dfs):
+            section = st.container()
+            with section:
+                st.pyplot(fig)
+                st.dataframe(df)
 
     st.write("docs here")
