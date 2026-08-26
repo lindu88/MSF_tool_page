@@ -6,9 +6,12 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from typing import Any
 
 import calplot
 import matplotlib.pyplot as plt
+import pandas as pd
+from pandas import DataFrame
 
 from .msf_plot_tools.common import (
     DEFAULT_NULL_COLOR,
@@ -89,7 +92,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: list[str] | None = None) -> plt.Figure:
+def main(argv: list[str] | None = None) -> tuple[Any, DataFrame]:
     args = build_parser().parse_args(argv)
 
     if args.no_show and not args.output:
@@ -118,6 +121,7 @@ def main(argv: list[str] | None = None) -> plt.Figure:
         colorbar=(args.value_mode != "presence"),
         **plot_kwargs,
     )
+    df2 = pd.DataFrame(series)
     year_axes = flatten_axes(ax)
     plot_years = sorted(date_index.year.unique())
 
@@ -150,6 +154,7 @@ def main(argv: list[str] | None = None) -> plt.Figure:
         output_path = Path(args.output).expanduser().resolve()
         output_path.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(output_path, dpi=args.dpi, bbox_inches="tight")
+        df2.to_csv(str(output_path) + ".csv")
 
     if args.no_show:
         plt.close(fig)
@@ -157,7 +162,7 @@ def main(argv: list[str] | None = None) -> plt.Figure:
         plt.show()
         plt.close(fig)
 
-    return fig
+    return fig, df2
 
 
 if __name__ == "__main__":

@@ -108,8 +108,9 @@ with tab2:
 
         args = [input_file, "--null-periods", null_file, "--output", output_path, "--no-show"]
         try:
-            fig = MSF_ticplot_sumplot_tsv.main(args)
+            fig,df = MSF_ticplot_sumplot_tsv.main(args)
             st.pyplot(fig)
+            st.dataframe(df)
         except Exception as e:
             st.error(e)
 
@@ -141,8 +142,9 @@ with tab3:
 
         args = [input_file, "--null-periods", null_file, "--output", output_path, "--no-show"]
         try:
-            fig = MSF_ticplot_sumplot_tsv.main(args)
+            fig, df = MSF_ticplot_sumplot_tsv.main(args)
             st.pyplot(fig)
+            st.dataframe(df)
         except Exception as e:
             st.error(e)
 
