@@ -7,7 +7,7 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
     elu_files = [f for f in os.listdir(folder_path_files) if f.endswith('.ELU')]
 
     #make folder if does not exist
-    os.makedirs(file_folder_path + save_file_name, exist_ok=True)
+    os.makedirs(file_folder_path + "/" + save_file_name, exist_ok=True)
 
     sum_out = ""
     sum_out_cal = ""
