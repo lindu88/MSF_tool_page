@@ -7,7 +7,8 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
     elu_files = [f for f in os.listdir(folder_path_files) if f.endswith('.ELU')]
 
     #make folder if does not exist
-    os.makedirs(file_folder_path + save_file_name, exist_ok=True)
+    folder_path = os.path.join(file_folder_path, save_file_name)
+    os.makedirs(folder_path, exist_ok=True)
 
     sum_out = ""
     sum_out_cal = ""
@@ -15,7 +16,7 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
     #If no fin files raise error
     if len(fin_files) == 0:
         raise FileNotFoundError('No .fin files found')
-    with open(file_folder_path + "/" + save_file_name + "/" + "sc100-_fin" + ".msp", "w") as scp_file:
+    with open(folder_path + "/sc100-_fin.msp", "w") as scp_file:
         for fin_file in fin_files:
             sum_is = 0
             file_path = os.path.join(folder_path_files, fin_file)
@@ -32,7 +33,7 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
 
             try:
                 with open(file_path, 'r') as file:
-                    with open(file_folder_path + "/" + save_file_name + "/" + name + ".msp", "w") as o_file:
+                    with open(folder_path + "/" + str(name) + ".msp", "w") as o_file:
                         content = file.read()
                         # split into components and don't keep first part
                         split_content = content.split('************************')
@@ -47,10 +48,10 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
                             elif int(is_) >= cutoff_msp_IS and int(sc) <= sc_cutoff:
                                 write_msp_fin(scp_file, content, name)
                 if empty:
-                    os.remove(file_folder_path + "/" + save_file_name + "/" + name + ".msp")
+                    os.remove(folder_path + "/" + str(name) + ".msp")
             except Exception as e:
                 print(f"Error processing {fin_file}: {str(e)}")
-    with open(file_folder_path + "/" + save_file_name + "/" + "sc100-_elu" + ".msp", "w") as scp_file:
+    with open(folder_path + "/sc100-_elu.msp", "w") as scp_file:
         for elu_file in elu_files:
             sum_is = 0
             file_path = os.path.join(folder_path_files, elu_file)
@@ -84,7 +85,7 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
                             add_value(d, int(sc), (int(sc), int(is_)))
                 for key, _ in d.items():
                     sum_is += max(is_ for sc, is_ in d[key])
-                with open(file_folder_path + "/" + save_file_name + "/" + name + ".msp", "w") as o_file:
+                with open(folder_path + "/" + str(name) + ".msp", "w") as o_file:
                     for key_msp, _ in d_msp.items():
                         best = max(d_msp[key_msp], key=lambda x: x[1])
                         sc, is_, content, name = best
@@ -95,20 +96,17 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
                     sum_out += f"Dictionary of duplicates by scan number:\n"
                     sum_out += d_to_string(d)
                 if empty:
-                    os.remove(file_folder_path + "/" + save_file_name + "/" + name + ".msp")
+                    os.remove(folder_path + "/" + str(name) + ".msp")
             except Exception as e:
                 print(f"Error processing {elu_file}: {str(e)}")
-    with open(file_folder_path + "/" + save_file_name + "/" + "sum_of_peaks" + ".txt", "w") as sp_file:
+    with open(folder_path + "/sum_of_peaks.txt", "w") as sp_file:
         sp_file.write(sum_out)
-    with open(file_folder_path + "/" + save_file_name + "/" + "sum_of_peaks_cal" + ".txt", "w") as sp_file:
+    with open(folder_path + "/sum_of_peaks_cal.txt", "w") as sp_file:
         sp_file.write(sum_out_cal)
-
-    folder = file_folder_path + "/" + save_file_name
-
-    with open(folder + "/concat_elu.msp", "w") as out:
-        for file in os.listdir(folder):
+    with open(str(folder_path) + f"/concat_areac_{cutoff_msp_IS}_sccut_{sc_cutoff}_elu.msp", "w") as out:
+        for file in os.listdir(str(folder_path)):
             if file.endswith("_elu.msp"):
-                with open(folder + "/" + file, "r") as f:
+                with open(str(folder_path) + "/" + file, "r") as f:
                     out.write(f.read())
                     out.write("\n")
 

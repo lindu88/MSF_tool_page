@@ -72,18 +72,23 @@ with col2:
         st.write("**Save path:**", file_folder_path)
 
 
-        cutoff = st.number_input("IS cutoff",step=1,key="cutoff_fpnnr")
+        def handle_cutoff_change():
+            new_cutoff = st.session_state.cutoff_fpnnr
+            new_scan_count = st.session_state.scan_count_cutoff_fpnnr
 
-        scan_count_cutoff = st.number_input("Scan count cutoff",min_value=1,value=100,step=1,key="scan_count_cutoff_fpnnr")
+        cutoff = st.number_input("IS cutoff",step=1,key="cutoff_fpnnr", on_change=handle_cutoff_change)
+
+        scan_count_cutoff = st.number_input("Scan count cutoff",min_value=1,value=100,step=1,key="scan_count_cutoff_fpnnr", on_change=handle_cutoff_change)
 
         if st.button("Run FPNNR", key="run_fpnnr", type="primary"):
-            os.makedirs(os.path.join(file_folder_path, f"fin_elu_processing_{pathlib.Path(source_path).name}_areac_{cutoff}_sc{scan_count_cutoff}"),exist_ok=True)
+            folder_name = f"fin_elu_processing_{pathlib.Path(source_path).name}_areac_{cutoff}_sc{scan_count_cutoff}"
+            os.makedirs(os.path.join(file_folder_path, folder_name), exist_ok=True)
 
             console = StreamlitConsole()
 
             with redirect_stdout(console):
                 try:
-                    fpnnr.read_elu_fin_files(file_folder_path,source_path,f"fin_elu_processing_{pathlib.Path(source_path).name}",int(cutoff),int(scan_count_cutoff))
+                    fpnnr.read_elu_fin_files(file_folder_path, source_path, folder_name, int(cutoff),int(scan_count_cutoff))
                 except Exception as e:
                     st.error(e)
     st.write("Need to add documentation here")
