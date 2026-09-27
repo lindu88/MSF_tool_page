@@ -92,20 +92,26 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
                         write_msp_elu(o_file, content, name)
                 if sum_is > 0:
                     sum_out += f"{name} Sum of peaks IS: {sum_is}\n"
-                    sum_out_cal += f"{name} Sum of peaks IS: {sum_is}\n"
+                    sum_out_cal += f"{name}\t{sum_is}\n"
                     sum_out += f"Dictionary of duplicates by scan number:\n"
                     sum_out += d_to_string(d)
                 if empty:
                     os.remove(folder_path + "/" + str(name) + ".msp")
             except Exception as e:
                 print(f"Error processing {elu_file}: {str(e)}")
-    with open(folder_path + "/sum_of_peaks.txt", "w") as sp_file:
+    with open(folder_path + "/list_of_duplicate_peaks_removed.txt", "w") as sp_file:
         sp_file.write(sum_out)
-    with open(folder_path + "/sum_of_peaks_cal.txt", "w") as sp_file:
+    with open(folder_path + "/sum_of_peaks_cal.tsv", "w") as sp_file:
         sp_file.write(sum_out_cal)
     with open(str(folder_path) + f"/concat_areac_{cutoff_msp_IS}_sccut_{sc_cutoff}_elu.msp", "w") as out:
         for file in os.listdir(str(folder_path)):
             if file.endswith("_elu.msp"):
+                with open(str(folder_path) + "/" + file, "r") as f:
+                    out.write(f.read())
+                    out.write("\n")
+    with open(str(folder_path) + f"/concat_areac_{cutoff_msp_IS}_sccut_{sc_cutoff}_fin.msp", "w") as out:
+        for file in os.listdir(str(folder_path)):
+            if file.endswith("_fin.msp"):
                 with open(str(folder_path) + "/" + file, "r") as f:
                     out.write(f.read())
                     out.write("\n")
