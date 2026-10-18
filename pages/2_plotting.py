@@ -114,7 +114,7 @@ with tab2:
         except Exception as e:
             st.error(e)
 
-    st.write("docs here")
+    st.write("This code processes NIST search truncated .tsv file and generates both graphics and data tables for each compound detected. It is recommended to point to a subfolder specific to the output for example “/AMB-areac-##” to indicate output of AMB date using an area cutoff of ##.")
 with tab3:
     with st.container(border=True):
         with st.container(border=True, horizontal=True, horizontal_alignment="left"):
@@ -180,4 +180,4 @@ with tab4:
                 st.pyplot(fig)
                 st.dataframe(df)
 
-    st.write("docs here")
+    st.write("This code processes NIST search truncated .tsv file for selected data type AMB, CAL, CYL, or zero and generates time-of-day detection histograms showing how many times each compound was detected in the dataset. Select how many plots to generate (i.e. 5= top five detected compounds, determined by number of detection hits above cutoff) The title suffix (optional) is added to the header of the graphic generated.")

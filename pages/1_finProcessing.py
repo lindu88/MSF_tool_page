@@ -48,10 +48,12 @@ with col1:
 
             with redirect_stdout(console):
                 try:
-                    df_calib, df_cyl= fpm.read_fin_files(folder_path, save_path)
+                    with st.spinner("Executing function, please wait..."):
+                        df_calib, df_cyl= fpm.read_fin_files(folder_path, save_path)
+                    st.success(f"Success")
                 except Exception as e:
                     st.error(e)
-    st.write("Need to add documentation here")
+    st.write("This code takes AMDIS-created *.fin files (AMDIS calibration library matches) and extracts Benzene, Hexane, and Decane areas for plotting and determination of xx ppb area value. This value can be applied as a detection cutoff.")
     st.dataframe(df_calib)
     st.dataframe(df_cyl)
 with col2:
@@ -88,7 +90,9 @@ with col2:
 
             with redirect_stdout(console):
                 try:
-                    fpnnr.read_elu_fin_files(file_folder_path, source_path, folder_name, int(cutoff),int(scan_count_cutoff))
+                    with st.spinner("Executing function, please wait..."):
+                        fpnnr.read_elu_fin_files(file_folder_path, source_path, folder_name, int(cutoff),int(scan_count_cutoff))
+                    st.success(f"Success")
                 except Exception as e:
                     st.error(e)
-    st.write("Need to add documentation here")
+    st.write("This code removes scans (typically air peak) early in chromatogram, and applies the area cutoff so that only peaks higher than area cutoff are searched through NIST library.")

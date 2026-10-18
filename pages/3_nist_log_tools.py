@@ -63,7 +63,7 @@ with tab2:
             args = [file_path, "-o", save_path+"/"+Path(file_path).name+".tsv"]
             convert_nistlog_txt_to_tsv.main(args)
 
-    st.write("docs here")
+    st.write("this code processes full NIST search output log file into truncated file for creating calendar and hourly plots")
 with tab3:
     with st.container(border=True):
         with st.container(border=True, horizontal=True, horizontal_alignment="left"):
