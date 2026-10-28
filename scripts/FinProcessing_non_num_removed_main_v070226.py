@@ -105,13 +105,13 @@ def read_elu_fin_files(file_folder_path,folder_path_files, save_file_name, cutof
         sp_file.write(sum_out_cal)
     with open(str(folder_path) + f"/concat_areac_{cutoff_msp_IS}_sccut_{sc_cutoff}_elu.msp", "w") as out:
         for file in os.listdir(str(folder_path)):
-            if file.endswith("_elu.msp"):
+            if file.endswith("2_elu.msp"):
                 with open(str(folder_path) + "/" + file, "r") as f:
                     out.write(f.read())
                     out.write("\n")
     with open(str(folder_path) + f"/concat_areac_{cutoff_msp_IS}_sccut_{sc_cutoff}_fin.msp", "w") as out:
         for file in os.listdir(str(folder_path)):
-            if file.endswith("_fin.msp"):
+            if file.endswith("2_fin.msp"):
                 with open(str(folder_path) + "/" + file, "r") as f:
                     out.write(f.read())
                     out.write("\n")
